@@ -6,8 +6,8 @@
       <y>0</y>
       <z>140</z>
     </position>
-    <actionname></actionname>
-    <animationname></animationname>
+    <actionname>TestActionName</actionname>
+    <animationname>TestAnimationName</animationname>
     <neighbours>
       <neighbour>2</neighbour>
     </neighbours>

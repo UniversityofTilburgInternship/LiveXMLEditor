@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Actions.XML</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -12,18 +12,7 @@
   <script src="xmlLoader.js"></script>
   <script>
 		window.onload = function() {
-			var xmlText = getXmlText("xml.xml", "test");
-			var xmlDoc = getXMLDoc(xmlText);
-
-			var xmlText = getXmlText("xml.xml", "test"),
-				  xmlDocument = $.parseXML(xmlText),
-				  $xml = $(xmlDocument),
-				  $modifiersArray = $xml.find("modifiers");
-
-			//todo: Split .text() by whitespace
-			$($modifiersArray).each(function(index) {
-			  document.write("index of modifiers for action number 1: " + index + ": " + $(this).text());
-			});
+			drawTablesForEachActionInXML();
 		}
   </script>
 </head>
