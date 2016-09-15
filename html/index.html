@@ -14,13 +14,16 @@
 		window.onload = function() {
 			var xmlText = getXmlText("xml.xml", "test");
 			var xmlDoc = getXMLDoc(xmlText);
-			var id = 0;
 
-			$(xmlDoc).find("actions").each(function() {
-			  id = actions.attr()
+			var xmlText = getXmlText("xml.xml", "test"),
+				  xmlDocument = $.parseXML(xmlText),
+				  $xml = $(xmlDocument),
+				  $modifiersArray = $xml.find("modifiers");
+
+			//todo: Split .text() by whitespace
+			$($modifiersArray).each(function(index) {
+			  document.write("index of modifiers for action number 1: " + index + ": " + $(this).text());
 			});
-
-			document.write(id);
 		}
   </script>
 </head>
