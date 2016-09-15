@@ -14,11 +14,15 @@
 		window.onload = function() {
 			var xmlText = getXmlText("xml.xml", "test");
 			var xmlDoc = getXMLDoc(xmlText);
+			var id = 0;
 
-			document.getElementById("test").innerHTML = xmlDoc.getElementsByTagName("actions")[0].nodeValue;
+			$(xmlDoc).find("actions").each(function() {
+			  id = actions.attr()
+			});
+
+			document.write(id);
 		}
   </script>
-
 </head>
 
 <body>

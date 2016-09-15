@@ -8,6 +8,9 @@
     </position>
     <actionname></actionname>
     <animationname></animationname>
+    <neighbours>
+      <neighbour>2</neighbour>
+    </neighbours>
     <modifiers>
         <modifier>
           <id>0</id>
