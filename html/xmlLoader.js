@@ -1,4 +1,4 @@
-function loadFileToElement(filename, elementId)
+function getXmlText(filename, elementId)
 {
     var xmlHTTP = new XMLHttpRequest();
     try
@@ -21,13 +21,13 @@ function getXMLDoc(xmlText)
     if (window.DOMParser)
     {
         parser = new DOMParser();
-        xmlDoc = parser.parseFromString(txt, "text/xml");
+        xmlDoc = parser.parseFromString(xmlText, "text/xml");
     }
     else // Internet Explorer
     {
         xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
         xmlDoc.async = false;
-        xmlDoc.loadXML(txt);
+        xmlDoc.loadXML(xmlText);
     }  
     return xmlDoc;
 }

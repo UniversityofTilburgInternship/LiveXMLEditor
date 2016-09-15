@@ -12,7 +12,10 @@
   <script src="xmlLoader.js"></script>
   <script>
 		window.onload = function() {
-			loadFileToElement("xml.xml", "test");
+			var xmlText = getXmlText("xml.xml", "test");
+			var xmlDoc = getXMLDoc(xmlText);
+
+			document.getElementById('test').InnerHtml = xmlDoc.getElementsByTagName("actions")[0].nodeValue;
 		}
   </script>
 

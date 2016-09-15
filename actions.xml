@@ -41,5 +41,5 @@
           <modifier>30</modifier>
         </factor>
     </factors>
-  </event>
-</events>
+  </action>
+</actions>
