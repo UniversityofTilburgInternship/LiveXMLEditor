@@ -1,13 +1,14 @@
 <actions>
+  <actionId>555</actionId>
   <action>
-    <actionId>1</actionId>
+    <actionId>777</actionId>
     <position>
       <x>250</x>
       <y>0</y>
       <z>140</z>
     </position>
-    <actionname>TestActionName</actionname>
-    <animationname>TestAnimationName</animationname>
+    <actionname></actionname>
+    <animationname></animationname>
     <neighbours>
       <neighbour>2</neighbour>
     </neighbours>
