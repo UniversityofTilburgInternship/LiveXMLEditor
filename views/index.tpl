@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>cose demo</title>
+    <title>cose demo 676</title>
 
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
@@ -25,7 +25,7 @@
             position: absolute;
             left: 0;
             top: 0;
-            z-index: 999;
+            z-index: 1;
         }
 
         h1 {
@@ -52,21 +52,25 @@
     });
             cy.on('tap', 'node', function(evt){
                 var node = evt.cyTarget;
+                var nodeNameInForm = document.getElementById('nodeName');
+                nodeNameInForm.innerHTML = node.data('name');
+
                 console.log( 'tapped ' + node.id() );
             });
     });
 
     </script>
-
-    <script>
-
-    </script>
 </head>
 
 <body>
-<h1>cose demo</h1>
+<h3 id="nodeName"></h3>
+<h4 id="nodeModifierHeader"></h4>
+
+
 
 <div id="cy"></div>
+
+
 
 </body>
 

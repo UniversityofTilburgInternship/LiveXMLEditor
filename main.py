@@ -1,12 +1,12 @@
 import json
 
 import xmltodict
-from bottle import route, run, template, static_file
+from bottle import route, run, template, static_file, request
 
 nodes = []
 edges = []
 
-counter = 500;
+counter = 500
 def parse():
     global  counter
     with open('resources/actions.xml') as fd:
@@ -21,7 +21,6 @@ def parse():
             dictData["name"] = action["actionname"]
             dictPosition["x"] = 5
             dictPosition["y"] = 5
-            # dict["classes"] =
             dict["data"] = dictData
             dict["position"] = dictPosition
             nodes.append(dict)
@@ -46,6 +45,11 @@ parse()
 def index():
     global nodes
     return template('index', res=json.dumps(nodes))
+
+@route('/', method='POST')
+def index():
+    postdata = request.body.read()
+    print(postdata)
 
 
 run(host='localhost', port=8080)
