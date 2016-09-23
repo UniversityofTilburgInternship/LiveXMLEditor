@@ -26,17 +26,17 @@ def parse():
             dict["position"] = dictPosition
             nodes.append(dict)
 
-
-            for neighbour in action['neighbours']["neighbour"]:
-                edge = {}
-                edgeData = {}
-                edgeData["id"] = str(counter)
-                edgeData["source"] = dictData["id"]
-                edgeData["target"] = neighbour
-                edgeData["weight"] = 0.5
-                edge["data"] = edgeData
-                nodes.append(edge)
-                counter += 1
+            if bool(action['neighbours']["neighbour"]):
+                for neighbour in action['neighbours']["neighbour"]:
+                    edge = {}
+                    edgeData = {}
+                    edgeData["id"] = str(counter)
+                    edgeData["source"] = dictData["id"]
+                    edgeData["target"] = neighbour
+                    edgeData["weight"] = 0.5
+                    edge["data"] = edgeData
+                    nodes.append(edge)
+                    counter += 1
 
 
 parse()
