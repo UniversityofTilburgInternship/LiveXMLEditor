@@ -50,7 +50,16 @@
 
 
     });
+            cy.on('tap', 'node', function(evt){
+                var node = evt.cyTarget;
+                console.log( 'tapped ' + node.id() );
+            });
     });
+
+    </script>
+
+    <script>
+
     </script>
 </head>
 
