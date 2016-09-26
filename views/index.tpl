@@ -37,7 +37,7 @@
         }
 
         h2 {
-            color: rgb(85,85,85);
+            color: rgb(85, 85, 85);
         }
 
         .col-md-2 {
@@ -46,7 +46,7 @@
             background-color: cadetblue;
             color: white;
             margin-top: -20px !important;
-            padding-top: 0px!important;
+            padding-top: 0px !important;
             height: 100%;
         }
     </style>
@@ -57,18 +57,30 @@
 <body>
 
 
+<div class="col-md-2">
+    <h1>Graph editor</h1>
+    <h2 id="nodeName"></h2>
+    <h3 id="nodeModifierHeader"></h3>
+    <div class="form-group">
+        <label for="actionName">action name:</label>
+        <input type="text" class="form-control" id="actionName">
+    </div>
+    <div class="form-group">
+        <label for="animationName">animation name:</label>
+        <input type="text" class="form-control" id="animationName">
+    </div>
+    <div class="form-group">
+        <label for="neighbours">neigbours:</label>
+        <select class="form-control" id="neighbours">
 
-    <div class="col-md-2">
-        <h1>Graph editor</h1>
-        <h2 id="nodeName"></h2>
-        <h3 id="nodeModifierHeader"></h3>
+        </select>
     </div>
 
-        <h1>Graph</h1>
-        <div id="cy"></div>
+    <button type="submit" class="btn btn-default">Save</button>
+</div>
 
-
-
+<h1>Graph</h1>
+<div id="cy"></div>
 
 
 </body>
@@ -100,19 +112,22 @@
 
         elements: {
             nodes: {{!nodes}},
-            edges: {{!edges}}
-        },
+    edges: {{!edges}}
+    },
 
-        layout: {
-            name: 'grid',
-            padding: 10
-        }
-    });
+    layout: {
+        name: 'grid',
+                padding
+    :
+        10
+    }
+    })
+    ;
 
-    cy.on('tap', 'node', function(evt){
+    cy.on('tap', 'node', function (evt) {
         var node = evt.cyTarget;
-        $( "#nodeName" ).html(node.data('name'));
-        console.log( 'tapped ' + node.id() );
+        $("#nodeName").html(node.data('name'));
+        console.log('tapped ' + node.id());
     });
 
 

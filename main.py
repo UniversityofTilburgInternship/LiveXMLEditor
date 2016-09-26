@@ -7,9 +7,9 @@ from bottle import route, run, template, static_file, request
 from xmlParse import parse
 
 # Commented for debug purposes - DO NOT DELTE!
-root = tk.Tk()
-root.withdraw()
-file = filedialog.askopenfilename()
+# root = tk.Tk()
+# root.withdraw()
+# file = filedialog.askopenfilename()
 
 
 
