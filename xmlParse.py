@@ -73,9 +73,12 @@ def getNeighbourData(action):
 def removeNeighbourNode(neighbourId, rootNode):
     with open('resources/actions.xml') as fd:
         doc = xmltodict.parse(fd.read())
-        root = doc.getRoot()
+        #root = fd.getRoot()
 
         for action in doc["actions"]["action"]:
-            if rootNode == action["actionId"] and neighbourId in action["neighbours"]["neighbour"]["id"]
+            if rootNode == action["actionId"]:
                 del action["neighbours"]["neighbour"]
+                print('I deleted ' + action["neighbours"]["neighbour"])
                 #todo: actually remove from xml
+            else:
+                print("Didn't delete shit." + ' root node: ' + rootNode )
