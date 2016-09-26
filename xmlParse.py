@@ -39,6 +39,7 @@ def parse():
             dictData = {}
             dictData["id"] = action["actionId"]
             dictData["name"] = action["actionname"]
+            dictData["animationname"] = action["animationname"]
             dict["data"] = dictData
             nodes.append(dict)
             edges = edges + getNeighboursAsEdge(action)

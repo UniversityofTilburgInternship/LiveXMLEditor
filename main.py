@@ -14,14 +14,10 @@ from xmlParse import parse, getPersonalityNames, getNeighboursForGivenNode
 personalities = getPersonalityNames()
 nodes, edges = parse()
 
-for edge in edges:
-    print(edge)
-
-
 @route('/')
 def index():
     global nodes
-    return template('index', nodes=json.dumps(nodes), edges=json.dumps(edges), personalities=personalities)
+    return template('index',actions=nodes, nodes=json.dumps(nodes), edges=json.dumps(edges), personalities=personalities)
 
 @route('/', method='POST')
 def index():

@@ -76,7 +76,6 @@
     <h2 id="nodeName"></h2>
     <h3 id="nodeModifierHeader"></h3>
 
-    <form id="nodeEditor">
         <div class="form-group">
             <label for="actionName">action name:</label>
             <input type="text" class="form-control" id="actionName">
@@ -88,7 +87,15 @@
         <div class="form-group">
             <label for="neighbours">neigbours:</label>
             <select class="form-control" id="neighbours">
+                %for action in actions:
+                <option value='{{action["data"]["name"]}}'>{{action["data"]["name"]}}</option>
+                %end
             </select>
+                <button>+</button>
+
+            <div class="neighbours">
+
+            </div>
         </div>
         <div class="form-group">
             <label for="modifiers">personality modifiers:</label>
@@ -99,7 +106,6 @@
             </select>
         </div>
         <button type="submit" class="btn btn-default">Save</button>
-    </form>
 </div>
 
 <h1>Graph</h1>
@@ -109,6 +115,8 @@
 </body>
 
 <script>
+    var nodes = {{!nodes}};
+    var edges = {{!edges}};
     var cy = cytoscape({
         container: $('#cy')[0],
 
@@ -138,8 +146,8 @@
                 }),
 
         elements: {
-            nodes: {{!nodes}},
-    edges: {{!edges}}
+            nodes: nodes,
+    edges: edges
     },
     layout: {
         name: 'grid',
@@ -153,25 +161,37 @@
     cy.on('tap', 'node', function (evt) {
         var node = evt.cyTarget;
         $("#nodeName").html(node.data('name'));
+        $("#actionName").val(node.data('name'));
+        $("#animationName").val(node.data('animationname'));
         console.log('tapped ' + node.id());
 
         var neighboursSelectElement = document.getElementById('neighbours');
 
-        $('#neighbours')
-                .find('option')
-                .remove()
-                .end();
+        $('.neighbours').empty();
 
-        for(i = 0; i < node.connectedEdges().length; i++)
+        for(var i = 0; i < node.connectedEdges().length; i++)
         {
             var currentNodeName = node.connectedEdges()[i].target().data('name');
 
             if(currentNodeName != node.data('name'))
-                $('#neighbours').append('<option value="' + currentNodeName + '">' + currentNodeName + '</option>');
+                $('.neighbours').append('<div class="col-md-8">' + currentNodeName + '' +
+                        '</div> <div class="col-md-4">' +
+                        '<button onclick="removeNeighbour('+ node.connectedEdges()[i].target().data("id")+ ', ' + node.id() +
+                        ')">-</button></div> ');
         }
     });
 
+    function removeNeighbour(neighbourId, rootId) {
 
+        for (var i = 0; i < edges.length; i++) {
+            if(edges[i].data.source == rootId && edges[i].data.target == neighbourId) {
+                edges.splice(i, 1);
+                console.log(i)
+                break;
+            }
+        }
+        cy.load();
+    }
 </script>
 
 
