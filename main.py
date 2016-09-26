@@ -16,6 +16,9 @@ from xmlParse import parse
 
 nodes, edges = parse()
 
+for edge in edges:
+    print(edge)
+
 
 @route('/')
 def index():
