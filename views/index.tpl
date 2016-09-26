@@ -16,6 +16,22 @@
     <!-- Latest compiled JavaScript -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+<!--
+    <script>
+        $(document).ready(function () {
+            $('#nodeEditor').submit(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        $('#ajaxP').html(response);
+                    }
+                });
+                e.preventDefault();
+            });
+        });
+    </script>-->
 
     <style>
         body {
@@ -50,8 +66,6 @@
             height: 100%;
         }
     </style>
-
-
 </head>
 
 <body>
@@ -61,22 +75,31 @@
     <h1>Graph editor</h1>
     <h2 id="nodeName"></h2>
     <h3 id="nodeModifierHeader"></h3>
-    <div class="form-group">
-        <label for="actionName">action name:</label>
-        <input type="text" class="form-control" id="actionName">
-    </div>
-    <div class="form-group">
-        <label for="animationName">animation name:</label>
-        <input type="text" class="form-control" id="animationName">
-    </div>
-    <div class="form-group">
-        <label for="neighbours">neigbours:</label>
-        <select class="form-control" id="neighbours">
 
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-default">Save</button>
+    <form id="nodeEditor">
+        <div class="form-group">
+            <label for="actionName">action name:</label>
+            <input type="text" class="form-control" id="actionName">
+        </div>
+        <div class="form-group">
+            <label for="animationName">animation name:</label>
+            <input type="text" class="form-control" id="animationName">
+        </div>
+        <div class="form-group">
+            <label for="neighbours">neigbours:</label>
+            <select class="form-control" id="neighbours">
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="modifiers">personality modifiers:</label>
+            <select class="form-control" id="modifiers">
+                %for personality in personalities:
+                <option value='{{personality["data"]["name"]}}'>{{personality["data"]["name"]}}</option>
+                %end
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default">Save</button>
+    </form>
 </div>
 
 <h1>Graph</h1>
@@ -118,7 +141,6 @@
             nodes: {{!nodes}},
     edges: {{!edges}}
     },
-
     layout: {
         name: 'grid',
                 padding
@@ -132,6 +154,21 @@
         var node = evt.cyTarget;
         $("#nodeName").html(node.data('name'));
         console.log('tapped ' + node.id());
+
+        var neighboursSelectElement = document.getElementById('neighbours');
+
+        $('#neighbours')
+                .find('option')
+                .remove()
+                .end();
+
+        for(i = 0; i < node.connectedEdges().length; i++)
+        {
+            var currentNodeName = node.connectedEdges()[i].target().data('name');
+
+            if(currentNodeName != node.data('name'))
+                $('#neighbours').append('<option value="' + currentNodeName + '">' + currentNodeName + '</option>');
+        }
     });
 
 
