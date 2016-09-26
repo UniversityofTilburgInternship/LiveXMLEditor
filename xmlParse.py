@@ -70,3 +70,12 @@ def getNeighbourData(action):
             neighbourToBeInserted["data"] = currentNeighbour
             neighbourData.append(neighbourToBeInserted)
 
+def removeNeighbourNode(neighbourId, rootNode):
+    with open('resources/actions.xml') as fd:
+        doc = xmltodict.parse(fd.read())
+        root = doc.getRoot()
+
+        for action in doc["actions"]["action"]:
+            if rootNode == action["actionId"] and neighbourId in action["neighbours"]["neighbour"]["id"]
+                del action["neighbours"]["neighbour"]
+                #todo: actually remove from xml

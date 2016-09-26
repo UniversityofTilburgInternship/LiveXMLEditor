@@ -16,7 +16,6 @@
     <!-- Latest compiled JavaScript -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
-<!--
     <script>
         $(document).ready(function () {
             $('#nodeEditor').submit(function (e) {
@@ -31,7 +30,7 @@
                 e.preventDefault();
             });
         });
-    </script>-->
+    </script>
 
     <style>
         body {
@@ -158,6 +157,7 @@
     })
     ;
 
+
     cy.on('tap', 'node', function (evt) {
         var node = evt.cyTarget;
         $("#nodeName").html(node.data('name'));
@@ -182,16 +182,26 @@
     });
 
     function removeNeighbour(neighbourId, rootId) {
-
-        for (var i = 0; i < edges.length; i++) {
-            if(edges[i].data.source == rootId && edges[i].data.target == neighbourId) {
+        for (var i = 0; i < edges.length; i++)
+        {
+            if(edges[i].data.source == rootId && edges[i].data.target == neighbourId)
+            {
                 edges.splice(i, 1);
                 console.log(i)
                 break;
             }
-        }
         cy.load();
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/',
+            data: {neighbourId: neighbourId, rootId: rootId}
+        });
+
     }
+
+
 </script>
 
 
