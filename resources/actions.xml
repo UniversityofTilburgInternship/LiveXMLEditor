@@ -6,7 +6,7 @@
             <y>0</y>
             <z>14</z>
         </position>
-        <actionname>Kill other NPC</actionname>
+        <actionname>Number0</actionname>
         <animationname>KillAnimation</animationname>
         <neighbours>
             <neighbour>1</neighbour>
@@ -55,9 +55,10 @@
             <y>0</y>
             <z>10</z>
         </position>
-        <actionname>Get coffee</actionname>
+        <actionname>Number1</actionname>
         <animationname>CoffeeAnimation</animationname>
         <neighbours>
+            <neighbour>0</neighbour>
             <neighbour>4</neighbour>
             <neighbour>5</neighbour>
         </neighbours>
@@ -103,9 +104,10 @@
             <y>0</y>
             <z>28</z>
         </position>
-        <actionname>test11</actionname>
+        <actionname>Number2</actionname>
         <animationname>Otheranim</animationname>
         <neighbours>
+            <neighbour>0</neighbour>
             <neighbour>4</neighbour>
             <neighbour>5</neighbour>
         </neighbours>
@@ -151,9 +153,10 @@
             <y>0</y>
             <z>25</z>
         </position>
-        <actionname>Get Coke</actionname>
+        <actionname>Number3</actionname>
         <animationname>CokeAnimation</animationname>
         <neighbours>
+            <neighbour>0</neighbour>
             <neighbour>5</neighbour>
         </neighbours>
         <modifiers>
@@ -198,10 +201,11 @@
             <y>0</y>
             <z>12</z>
         </position>
-        <actionname>Get beer</actionname>
+        <actionname>Number4</actionname>
         <animationname>BeerAnimation</animationname>
         <neighbours>
-            <neighbour></neighbour>
+            <neighbour>1</neighbour>
+            <neighbour>2</neighbour>
         </neighbours>
         <modifiers>
             <modifier>
@@ -245,10 +249,12 @@
             <y>0</y>
             <z>3</z>
         </position>
-        <actionname>Get Mora</actionname>
+        <actionname>Number5</actionname>
         <animationname>MoraAnimation</animationname>
         <neighbours>
-            <neighbour></neighbour>
+            <neighbour>1</neighbour>
+            <neighbour>2</neighbour>
+            <neighbour>3</neighbour>
         </neighbours>
         <modifiers>
             <modifier>

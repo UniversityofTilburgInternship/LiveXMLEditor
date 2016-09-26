@@ -95,19 +95,23 @@
         style: cytoscape.stylesheet()
                 .selector('node')
                 .css({
-                    'content': 'data(name)',
-                    'text-valign': 'center',
-                    'color': 'white',
-                    'text-outline-width': 2,
-                    'text-outline-color': '#888'
+                    'content': 'data(name)'
                 })
-                .selector(':selected')
+                .selector('edge')
                 .css({
-                    'background-color': 'black',
-                    'line-color': 'black',
-                    'target-arrow-color': 'black',
-                    'source-arrow-color': 'black',
-                    'text-outline-color': 'black'
+                    'target-arrow-shape': 'triangle',
+                    'width': 4,
+                    'line-color': '#ddd',
+                    'target-arrow-color': '#ddd',
+                    'curve-style': 'bezier'
+                })
+                .selector('.highlighted')
+                .css({
+                    'background-color': '#61bffc',
+                    'line-color': '#61bffc',
+                    'target-arrow-color': '#61bffc',
+                    'transition-property': 'background-color, line-color, target-arrow-color',
+                    'transition-duration': '0.5s'
                 }),
 
         elements: {
