@@ -52,13 +52,12 @@ def parse():
 
 def getNeighboursAsEdge(action):
     if bool(action["neighbours"]["neighbour"]):
-        iterator = 0
         neighbourEdges = []
         for neighbour in action["neighbours"]["neighbour"]:
+            print('Action id ' + action["actionId"] + ' has neighbour ' + neighbour)
             edge = {}
             edgeData = {}
-            iterator += 1
-            edgeData["id"] = str(iterator)
+            edgeData["id"] = float(neighbour + "." + action["actionId"])
             edgeData["source"] = action["actionId"]
             edgeData["target"] = neighbour
             edge["data"] = edgeData
