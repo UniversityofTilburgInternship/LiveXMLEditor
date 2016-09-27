@@ -10,7 +10,7 @@
         <animationname>KillAnimation</animationname>
         <neighbours>
             <neighbour>3</neighbour>
-        </neighbours>
+        <neighbour>4</neighbour></neighbours>
         <modifiers>
             <modifier>
                 <id>0</id>

@@ -73,7 +73,7 @@
 <div class="col-md-2">
     <h1>Graph editor</h1>
     <h2 id="nodeName"></h2>
-    <h3 id="nodeModifierHeader"></h3>
+    <h3 id="nodeId"></h3>
 
         <div class="form-group">
             <label for="actionName">action name:</label>
@@ -87,10 +87,10 @@
             <label for="neighbours">neigbours:</label>
             <select class="form-control" id="neighbours">
                 %for action in actions:
-                <option value='{{action["data"]["name"]}}'>{{action["data"]["name"]}}</option>
+                <option value='{{action["data"]["id"]}}'>{{action["data"]["name"]}}</option>
                 %end
             </select>
-                <button>+</button>
+                <button onclick="addNeighbour()">+</button>
 
             <div class="neighbours">
 
@@ -160,6 +160,7 @@
     cy.on('tap', 'node', function (evt) {
         var node = evt.cyTarget;
         $("#nodeName").html(node.data('name'));
+        $("#nodeId").html(node.data('id'));
         $("#actionName").val(node.data('name'));
         $("#animationName").val(node.data('animationname'));
         console.log('tapped ' + node.id());
@@ -211,7 +212,25 @@
         });
     }
 
+    function addNeighbour() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        var neighbourId = document.getElementById("neighbours").value;
 
+        cy.add([
+            { group: "edges", data: {source: nodeId, target: neighbourId } }
+        ]);
+
+        sendNodeToAddToPython(neighbourId, nodeId);
+    }
+
+    function sendNodeToAddToPython(neighbourToAdd, rootIdOfEdge)
+    {
+        $.ajax({
+            type: 'PUT',
+            url: '/',
+            data: {neighbourId: neighbourToAdd, rootId: rootIdOfEdge}
+        });
+    }
 </script>
 
 

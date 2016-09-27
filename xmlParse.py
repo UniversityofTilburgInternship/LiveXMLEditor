@@ -1,5 +1,5 @@
 import xmltodict
-from xml.etree.ElementTree import ElementTree
+from xml.etree.ElementTree import ElementTree, Element
 
 actionsFile = 'resources/actions.xml'
 settingsFile = 'resources/settings.xml'
@@ -90,8 +90,22 @@ def removeNeighbourFromXml(neighourId, rootNode):
                     neighbours.remove(neighbour)
 
     #disabled for debugging
-    tree.write('resources/actions.xml')
+    # tree.write('resources/actions.xml')
 
+def addEdgeToXml(neighourId, rootNode):
+    tree = ElementTree()
+    tree.parse('resources/actions.xml')
+
+    actions = tree.findall('action')
+    for action in actions:
+        if(int(action.find('actionId').text) == rootNode):
+            neighbours = action.find('neighbours')
+            neighbour = Element('neighbour')
+            neighbour.text = str(neighourId)
+            neighbours.append(neighbour)
+
+            #disabled for debugging
+            tree.write('resources/actions.xml')
 
 
 def getDocForXmlFile(fileName):
