@@ -21,7 +21,7 @@ def index():
 
 @route('/', method='POST')
 def index():
-    print(request.body.read())
+    print('Request body: ' + request.body.read())
     neighbourNodeId = request.params.get('neighbourId', 0, type=int)
     rootNodeId = request.params.get('rootId', 0, type=int)
     removeNeighbourNode(neighbourNodeId, rootNodeId)
