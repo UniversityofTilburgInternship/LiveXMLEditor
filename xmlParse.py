@@ -57,7 +57,7 @@ def getNeighboursAsEdge(action):
             print('Action id ' + action["actionId"] + ' has neighbour ' + neighbour)
             edge = {}
             edgeData = {}
-            edgeData["id"] = float(neighbour + "." + action["actionId"])
+            edgeData["id"] = neighbour + "." + action["actionId"]
             edgeData["source"] = action["actionId"]
             edgeData["target"] = neighbour
             edge["data"] = edgeData
@@ -90,7 +90,7 @@ def removeNeighbourFromXml(neighourId, rootNode):
                     neighbours.remove(neighbour)
 
     #disabled for debugging
-    #tree.write('resources/actions.xml')
+    tree.write('resources/actions.xml')
 
 
 

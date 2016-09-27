@@ -188,7 +188,7 @@
             {
                 console.log(edges[i].data.id);
 
-                var escapedEdgeId = parseFloat(edges[i].data.id);
+                var escapedEdgeId = edges[i].data.id;
 
                 var edgeToRemove = cy.edges("edge[id='" + escapedEdgeId + "']");
                 console.log('Edge to remove: ' + edgeToRemove);

@@ -14,6 +14,9 @@ from xmlParse import parse, getPersonalityNames, removeNeighbourFromXml
 personalities = getPersonalityNames()
 nodes, edges = parse()
 
+for edge in edges:
+    print (edge)
+
 @route('/')
 def index():
     global nodes
