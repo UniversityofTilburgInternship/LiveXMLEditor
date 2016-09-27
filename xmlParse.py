@@ -55,10 +55,10 @@ def getNeighboursAsEdge(action):
         iterator = 0
         neighbourEdges = []
         for neighbour in action["neighbours"]["neighbour"]:
-            print('Action id ' + action["actionId"] + ' has neighbour ' + neighbour)
             edge = {}
             edgeData = {}
-            edgeData["id"] = iterator+
+            iterator += 1
+            edgeData["id"] = str(iterator)
             edgeData["source"] = action["actionId"]
             edgeData["target"] = neighbour
             edge["data"] = edgeData
