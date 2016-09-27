@@ -157,7 +157,6 @@
     })
     ;
 
-
     cy.on('tap', 'node', function (evt) {
         var node = evt.cyTarget;
         $("#nodeName").html(node.data('name'));
@@ -181,24 +180,35 @@
         }
     });
 
-    function removeNeighbour(neighbourId, rootId) {
+    function removeNeighbour(neighbourId, rootId)
+    {
         for (var i = 0; i < edges.length; i++)
         {
             if(edges[i].data.source == rootId && edges[i].data.target == neighbourId)
             {
-                edges.splice(i, 1);
-                console.log(i)
+                console.log(edges[i].data.id);
+
+                var escapedEdgeId = parseInt(edges[i].data.id);
+
+                var edgeToRemove = cy.edges("edge[id='" + escapedEdgeId + "']");
+                console.log('Edge to remove: ' + edgeToRemove);
+                edgeToRemove.remove();
+
                 break;
             }
-        cy.load();
         }
+        sendNodeToDeleteToPython(neighbourId, rootId);
 
+        //location.reload();
+    }
+
+    function sendNodeToDeleteToPython(neighbourToDelete, rootOfNeighbour)
+    {
         $.ajax({
             type: 'POST',
             url: '/',
-            data: {neighbourId: neighbourId, rootId: rootId}
+            data: {neighbourId: neighbourToDelete, rootId: rootOfNeighbour}
         });
-
     }
 
 

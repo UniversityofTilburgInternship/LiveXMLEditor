@@ -1,58 +1,64 @@
 import xmltodict
+from xml.etree.ElementTree import ElementTree
+
+actionsFile = 'resources/actions.xml'
+settingsFile = 'resources/settings.xml'
 
 neighboursForGivenNode = []
 personalities = []
 nodes = []
 edges = []
 
+
 def getNeighboursForGivenNode(nodeId):
-    with open('resources/actions.xml') as fd:
-        doc = xmltodict.parse(fd.read())
-        neighboursForGivenNode = []
+    doc = getDocForXmlFile(actionsFile)
+    neighboursForGivenNode = []
 
-        for action in doc["actions"]["action"]:
-            if(int(action["actionId"]) == nodeId):
-                neighboursForGivenNode = getNeighboursData(action)
+    for action in doc["actions"]["action"]:
+        if (int(action["actionId"]) == nodeId):
+            neighboursForGivenNode = getNeighboursData(action)
 
-        return neighboursForGivenNode
+    return neighboursForGivenNode
+
 
 def getPersonalityNames():
-    with open('resources/settings.xml') as settingsFile:
-        settingsDoc = xmltodict.parse(settingsFile.read())
-
-        for personality in settingsDoc["settings"]["personalities"]["personality"]:
-            dict = {}
-            dictData ={}
-            dictData["name"] = personality["name"]
-            dict["data"] = dictData
-            personalities.append(dict)
+    settingsDoc = getDocForXmlFile(settingsFile)
+    for personality in settingsDoc["settings"]["personalities"]["personality"]:
+        dict = {}
+        dictData = {}
+        dictData["name"] = personality["name"]
+        dict["data"] = dictData
+        personalities.append(dict)
 
     return personalities
 
+
 def parse():
     global edges
-    with open('resources/actions.xml') as fd:
-        doc = xmltodict.parse(fd.read())
+    doc = getDocForXmlFile(actionsFile)
 
-        for action in doc["actions"]["action"]:
-            dict = {}
-            dictData = {}
-            dictData["id"] = action["actionId"]
-            dictData["name"] = action["actionname"]
-            dictData["animationname"] = action["animationname"]
-            dict["data"] = dictData
-            nodes.append(dict)
-            edges = edges + getNeighboursAsEdge(action)
+    for action in doc["actions"]["action"]:
+        dict = {}
+        dictData = {}
+        dictData["id"] = action["actionId"]
+        dictData["name"] = action["actionname"]
+        dictData["animationname"] = action["animationname"]
+        dict["data"] = dictData
+        nodes.append(dict)
+        edges = edges + getNeighboursAsEdge(action)
 
     return nodes, edges
 
+
 def getNeighboursAsEdge(action):
     if bool(action["neighbours"]["neighbour"]):
+        iterator = 0
         neighbourEdges = []
         for neighbour in action["neighbours"]["neighbour"]:
             print('Action id ' + action["actionId"] + ' has neighbour ' + neighbour)
             edge = {}
             edgeData = {}
+            edgeData["id"] = iterator+
             edgeData["source"] = action["actionId"]
             edgeData["target"] = neighbour
             edge["data"] = edgeData
@@ -60,7 +66,8 @@ def getNeighboursAsEdge(action):
 
     return neighbourEdges
 
-def getNeighbourData(action):
+
+def getNeighboursData(action):
     if bool(action['neighbours']["neighbour"]):
         neighbourData = {}
         for neighbour in action['neighbours']["neighbour"]:
@@ -70,15 +77,24 @@ def getNeighbourData(action):
             neighbourToBeInserted["data"] = currentNeighbour
             neighbourData.append(neighbourToBeInserted)
 
-def removeNeighbourNode(neighbourId, rootNode):
-    with open('resources/actions.xml') as fd:
-        doc = xmltodict.parse(fd.read())
-        #root = fd.getRoot()
+def removeNeighbourFromXml(neighourId, rootNode):
+    tree = ElementTree()
+    tree.parse('resources/actions.xml')
 
-        for action in doc["actions"]["action"]:
-            if rootNode == action["actionId"]:
-                del action["neighbours"]["neighbour"]
-                print('I deleted ' + action["neighbours"]["neighbour"])
-                #todo: actually remove from xml
-            else:
-                print("Didn't delete shit." + ' root node: ' + rootNode )
+    actions = tree.findall('action')
+    for action in actions:
+        if(int(action.find('actionId').text) == rootNode):
+            neighbours = action.find('neighbours')
+            for neighbour in neighbours:
+                if(int(neighbour.text) == neighourId):
+                    print('Removing ' + str(neighbour))
+                    neighbours.remove(neighbour)
+
+    #disabled for debugging
+    #tree.write('resources/actions.xml')
+
+
+
+def getDocForXmlFile(fileName):
+    with open(fileName) as fd:
+        return xmltodict.parse(fd.read())

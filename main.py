@@ -4,7 +4,7 @@ import webbrowser
 import tkinter as tk
 from tkinter import filedialog
 from bottle import route, run, template, static_file, request
-from xmlParse import parse, getPersonalityNames, removeNeighbourNode
+from xmlParse import parse, getPersonalityNames, removeNeighbourFromXml
 
 # Commented for debug purposes - DO NOT DELTE!
 # root = tk.Tk()
@@ -21,10 +21,9 @@ def index():
 
 @route('/', method='POST')
 def index():
-    print('Request body: ' + request.body.read())
     neighbourNodeId = request.params.get('neighbourId', 0, type=int)
     rootNodeId = request.params.get('rootId', 0, type=int)
-    removeNeighbourNode(neighbourNodeId, rootNodeId)
+    removeNeighbourFromXml(neighbourNodeId, rootNodeId)
 
 
 webbrowser.open('http://localhost:8080')
