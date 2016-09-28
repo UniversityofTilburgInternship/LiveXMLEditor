@@ -14,9 +14,6 @@ from xmlParse import parse, getPersonalityNames, removeNeighbourFromXml, addEdge
 personalities = getPersonalityNames()
 nodes, edges = parse()
 
-for edge in edges:
-    print (edge)
-
 
 @route('/')
 def index():
@@ -31,11 +28,13 @@ def index():
     rootNodeId = request.params.get('rootId', 0, type=int)
     removeNeighbourFromXml(neighbourNodeId, rootNodeId)
 
+
 @route('/', method='PUT')
 def index():
     neighbourNodeId = request.params.get('neighbourId', 0, type=int)
     rootNodeId = request.params.get('rootId', 0, type=int)
     addEdgeToXml(neighbourNodeId, rootNodeId)
+
 
 @route('/', method='DELETE')
 def index():

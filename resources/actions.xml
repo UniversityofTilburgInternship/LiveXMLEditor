@@ -9,8 +9,7 @@
         <actionname>Number0</actionname>
         <animationname>KillAnimation</animationname>
         <neighbours>
-            <neighbour>3</neighbour>
-            <neighbour>4</neighbour></neighbours>
+            <neighbour>3</neighbour></neighbours>
         <modifiers>
             <modifier>
                 <id>0</id>

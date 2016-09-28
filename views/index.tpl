@@ -105,13 +105,18 @@
         </select>
     </div>
 
-
-    <button type="submit" class="btn btn-success">save</button>
-    <button onclick="deleteNode()" class="btn btn-danger">delete</button>
+    <div class="editNode">
+        <button type="submit" class="btn btn-success">save</button>
+        <button onclick="deleteNode()" class="btn btn-danger">delete</button>
+    </div>
+    <div class="newNode">
+        <button onclick="newNode()"  class="btn btn-primary">New node +</button>
+    </div>
 </div>
 
 <h1>Graph</h1>
-<div id="cy"></div>
+<div id="cy">
+</div>
 
 
 </body>
@@ -237,6 +242,21 @@
             url: '/',
             data: {node: nodeId}
         });
+    }
+
+    function newNode() {
+        var id = highestId() + 1;
+        cy.add([
+            {group: "nodes", data: {id: id, name: "newNode" + id, position: {x: 1000, y: 1000}}}
+        ]);
+    }
+
+    function highestId() {
+        var currentHeighest = 0;
+        for(var i = 0; i < nodes.length; i++) {
+            currentHeighest = nodes[i].data.id > currentHeighest ? nodes[i].data.id : currentHeighest;
+        }
+        return parseInt(currentHeighest);
     }
 </script>
 
