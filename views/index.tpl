@@ -75,36 +75,39 @@
     <h2 id="nodeName"></h2>
     <h3 id="nodeId"></h3>
 
-        <div class="form-group">
-            <label for="actionName">action name:</label>
-            <input type="text" class="form-control" id="actionName">
-        </div>
-        <div class="form-group">
-            <label for="animationName">animation name:</label>
-            <input type="text" class="form-control" id="animationName">
-        </div>
-        <div class="form-group">
-            <label for="neighbours">neigbours:</label>
-            <select class="form-control" id="neighbours">
-                %for action in actions:
-                <option value='{{action["data"]["id"]}}'>{{action["data"]["name"]}}</option>
-                %end
-            </select>
-                <button onclick="addNeighbour()">+</button>
+    <div class="form-group">
+        <label for="actionName">action name:</label>
+        <input type="text" class="form-control" id="actionName">
+    </div>
+    <div class="form-group">
+        <label for="animationName">animation name:</label>
+        <input type="text" class="form-control" id="animationName">
+    </div>
+    <div class="form-group">
+        <label for="neighbours">neigbours:</label>
+        <select class="form-control" id="neighbours">
+            %for action in actions:
+            <option value='{{action["data"]["id"]}}'>{{action["data"]["name"]}}</option>
+            %end
+        </select>
+        <button onclick="addNeighbour()">+</button>
 
-            <div class="neighbours">
+        <div class="neighbours">
 
-            </div>
         </div>
-        <div class="form-group">
-            <label for="modifiers">personality modifiers:</label>
-            <select class="form-control" id="modifiers">
-                %for personality in personalities:
-                <option value='{{personality["data"]["name"]}}'>{{personality["data"]["name"]}}</option>
-                %end
-            </select>
-        </div>
-        <button type="submit" class="btn btn-default">Save</button>
+    </div>
+    <div class="form-group">
+        <label for="modifiers">personality modifiers:</label>
+        <select class="form-control" id="modifiers">
+            %for personality in personalities:
+            <option value='{{personality["data"]["name"]}}'>{{personality["data"]["name"]}}</option>
+            %end
+        </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-success">save</button>
+    <button onclick="deleteNode()" class="btn btn-danger">delete</button>
 </div>
 
 <h1>Graph</h1>
@@ -117,45 +120,43 @@
     var nodes = {{!nodes}};
     var edges = {{!edges}};
     var cy = cytoscape({
-        container: $('#cy')[0],
+                container: $('#cy')[0],
 
-        boxSelectionEnabled: false,
-        autounselectify: true,
+                boxSelectionEnabled: false,
+                autounselectify: true,
 
-        style: cytoscape.stylesheet()
-                .selector('node')
-                .css({
-                    'content': 'data(name)'
-                })
-                .selector('edge')
-                .css({
-                    'target-arrow-shape': 'triangle',
-                    'width': 4,
-                    'line-color': '#ddd',
-                    'target-arrow-color': '#ddd',
-                    'curve-style': 'bezier'
-                })
-                .selector('.highlighted')
-                .css({
-                    'background-color': '#61bffc',
-                    'line-color': '#61bffc',
-                    'target-arrow-color': '#61bffc',
-                    'transition-property': 'background-color, line-color, target-arrow-color',
-                    'transition-duration': '0.5s'
-                }),
+                style: cytoscape.stylesheet()
+                        .selector('node')
+                        .css({
+                            'content': 'data(name)'
+                        })
+                        .selector('edge')
+                        .css({
+                            'target-arrow-shape': 'triangle',
+                            'width': 4,
+                            'line-color': '#ddd',
+                            'target-arrow-color': '#ddd',
+                            'curve-style': 'bezier'
+                        })
+                        .selector('.highlighted')
+                        .css({
+                            'background-color': '#61bffc',
+                            'line-color': '#61bffc',
+                            'target-arrow-color': '#61bffc',
+                            'transition-property': 'background-color, line-color, target-arrow-color',
+                            'transition-duration': '0.5s'
+                        }),
 
-        elements: {
-            nodes: nodes,
-    edges: edges
-    },
-    layout: {
-        name: 'grid',
-                padding
-    :
-        10
-    }
-    })
-    ;
+                elements: {
+                    nodes: nodes,
+                    edges: edges
+                },
+                layout: {
+                    name: 'grid',
+                    padding: 10
+                }
+            })
+            ;
 
     cy.on('tap', 'node', function (evt) {
         var node = evt.cyTarget;
@@ -169,24 +170,20 @@
 
         $('.neighbours').empty();
 
-        for(var i = 0; i < node.connectedEdges().length; i++)
-        {
+        for (var i = 0; i < node.connectedEdges().length; i++) {
             var currentNodeName = node.connectedEdges()[i].target().data('name');
 
-            if(currentNodeName != node.data('name'))
+            if (currentNodeName != node.data('name'))
                 $('.neighbours').append('<div class="col-md-8">' + currentNodeName + '' +
                         '</div> <div class="col-md-4">' +
-                        '<button onclick="removeNeighbour('+ node.connectedEdges()[i].target().data("id")+ ', ' + node.id() +
+                        '<button onclick="removeNeighbour(' + node.connectedEdges()[i].target().data("id") + ', ' + node.id() +
                         ')">-</button></div> ');
         }
     });
 
-    function removeNeighbour(neighbourId, rootId)
-    {
-        for (var i = 0; i < edges.length; i++)
-        {
-            if(edges[i].data.source == rootId && edges[i].data.target == neighbourId)
-            {
+    function removeNeighbour(neighbourId, rootId) {
+        for (var i = 0; i < edges.length; i++) {
+            if (edges[i].data.source == rootId && edges[i].data.target == neighbourId) {
                 console.log(edges[i].data.id);
 
                 var escapedEdgeId = edges[i].data.id;
@@ -203,8 +200,7 @@
         //location.reload();
     }
 
-    function sendNodeToDeleteToPython(neighbourToDelete, rootOfNeighbour)
-    {
+    function sendNodeToDeleteToPython(neighbourToDelete, rootOfNeighbour) {
         $.ajax({
             type: 'POST',
             url: '/',
@@ -217,18 +213,29 @@
         var neighbourId = document.getElementById("neighbours").value;
 
         cy.add([
-            { group: "edges", data: {source: nodeId, target: neighbourId } }
+            {group: "edges", data: {source: nodeId, target: neighbourId}}
         ]);
 
         sendNodeToAddToPython(neighbourId, nodeId);
     }
 
-    function sendNodeToAddToPython(neighbourToAdd, rootIdOfEdge)
-    {
+    function sendNodeToAddToPython(neighbourToAdd, rootIdOfEdge) {
         $.ajax({
             type: 'PUT',
             url: '/',
             data: {neighbourId: neighbourToAdd, rootId: rootIdOfEdge}
+        });
+    }
+
+    function deleteNode() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        var nodeToRemove = cy.nodes("node[id='" + nodeId + "']");
+        nodeToRemove.remove();
+
+        $.ajax({
+            type: 'DELETE',
+            url: '/',
+            data: {node: nodeId}
         });
     }
 </script>

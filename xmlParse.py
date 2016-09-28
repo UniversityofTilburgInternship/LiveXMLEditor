@@ -79,7 +79,6 @@ def getNeighboursData(action):
 def removeNeighbourFromXml(neighourId, rootNode):
     tree = ElementTree()
     tree.parse('resources/actions.xml')
-
     actions = tree.findall('action')
     for action in actions:
         if(int(action.find('actionId').text) == rootNode):
@@ -90,7 +89,7 @@ def removeNeighbourFromXml(neighourId, rootNode):
                     neighbours.remove(neighbour)
 
     #disabled for debugging
-    # tree.write('resources/actions.xml')
+    tree.write('resources/actions.xml')
 
 def addEdgeToXml(neighourId, rootNode):
     tree = ElementTree()
@@ -106,6 +105,20 @@ def addEdgeToXml(neighourId, rootNode):
 
             #disabled for debugging
             tree.write('resources/actions.xml')
+
+def removeNodeFromXml(id):
+    tree = ElementTree()
+    tree.parse('resources/actions.xml')
+    actions = tree.getroot()
+    for action in actions:
+        removeNeighbourFromXml(int(id), int(action.find('actionId').text))
+        if(int(action.find('actionId').text) == id):
+            actions.remove(action)
+    tree.write('resources/actions.xml')
+
+
+
+
 
 
 def getDocForXmlFile(fileName):

@@ -4,7 +4,7 @@ import webbrowser
 import tkinter as tk
 from tkinter import filedialog
 from bottle import route, run, template, static_file, request
-from xmlParse import parse, getPersonalityNames, removeNeighbourFromXml, addEdgeToXml
+from xmlParse import parse, getPersonalityNames, removeNeighbourFromXml, addEdgeToXml, removeNodeFromXml
 
 # Commented for debug purposes - DO NOT DELTE!
 # root = tk.Tk()
@@ -36,6 +36,11 @@ def index():
     neighbourNodeId = request.params.get('neighbourId', 0, type=int)
     rootNodeId = request.params.get('rootId', 0, type=int)
     addEdgeToXml(neighbourNodeId, rootNodeId)
+
+@route('/', method='DELETE')
+def index():
+    nodeId = request.params.get('node', 0, type=int)
+    removeNodeFromXml(nodeId)
 
 
 webbrowser.open('http://localhost:8080')
