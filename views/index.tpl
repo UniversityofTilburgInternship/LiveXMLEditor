@@ -78,7 +78,7 @@
 
     <div class="form-group">
         <label for="actionName">action name:</label>
-        <input type="text" class="form-control" id="actionName">
+        <input type="text" class="form-control" name="actionName" id="actionName">
     </div>
     <div class="form-group">
         <label for="animationName">animation name:</label>
@@ -101,9 +101,18 @@
         <label for="modifiers">personality modifiers:</label>
         <select class="form-control" id="modifiers">
             %for personality in personalities:
-            <option value='{{personality["data"]["name"]}}'>{{personality["data"]["name"]}}</option>
+            <option value='{{personality["data"]["id"]}}'>{{personality["data"]["name"]}}</option>
             %end
         </select>
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" type="number" min="0" max="100" id="modifier" >
+        <button onclick="addModifier()" class="btn btn-primary">+</button>
+    </div>
+
+    <div class="modifiers">
+
     </div>
 
     <div class="editNode">
@@ -125,6 +134,9 @@
 <script>
     var nodes = {{!nodes}};
     var edges = {{!edges}};
+    var personalities = {{!personalities}};
+
+    console.log(personalities);
     var cy = cytoscape({
                 container: $('#cy')[0],
 
@@ -170,8 +182,7 @@
         $("#nodeId").html(node.data('id'));
         $("#actionName").val(node.data('name'));
         $("#animationName").val(node.data('animationname'));
-        console.log('tapped ' + node.id());
-
+        refreshModifiers();
         var neighboursSelectElement = document.getElementById('neighbours');
 
         $('.neighbours').empty();
@@ -218,8 +229,40 @@
     function newNode() {
         var id = highestId() + 1;
         cy.add([
-            {group: "nodes", data: {id: id, name: "newNode" + id}, position:{x: cy.width()/2, y: cy.height()/2}}
+            {
+                group: "nodes",
+                data: {
+                    id: id,
+                    name: "newNode" + id,
+                    animationname: "animation",
+                    modifiers: [
+                        {id: "none", value: "none"}
+                    ]
+                    ,
+                    position: {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    }
+                },
+                position:{x: cy.width()/2, y: cy.height()/2}
+            }
         ]);
+    }
+
+    function refreshModifiers() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        var modifiers = cy.nodes("node[id='" + nodeId + "']").data("modifiers");
+
+        $('.modifiers').empty();
+
+        for(var i = 0; i < modifiers.length; i++) {
+            console.log(personalities[modifiers[i].id].data.name);
+            $('.modifiers').append('<div class="col-md-8">' + personalities[modifiers[i].id].data.name + ' ' + modifiers[i].value  +
+                    '</div> <div class="col-md-4">' +
+                    '<button onclick="removeModifier(' + modifiers[i].id  +
+                    ')">-</button></div> ');
+        }
     }
 
     function highestId() {
@@ -231,6 +274,29 @@
         return parseInt(currentHeighest);
     }
 
+    function addModifier() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        var modifiers = cy.nodes("node[id='" + nodeId + "']").data("modifiers");
+        var newModifier = {}
+        var alreadyExists = false;
+
+        for(var i = 0; i < modifiers.length; i++) {
+            if(modifiers[i].id == $("#modifiers").val()){
+                modifiers[i].value = $("#modifier").val();
+                alreadyExists = true
+            }
+        }
+
+        console.log($("#modifiers").val());
+        if(!alreadyExists) {
+            newModifier["id"] = $("#modifiers").val();
+            newModifier["value"] = $("#modifier").val();
+            modifiers.push(newModifier)
+        }
+        console.log(modifiers);
+        cy.nodes("node[id='" + nodeId + "']").data("modifiers", modifiers);
+        refreshModifiers();
+    }
 
     function graphToXML() {
         var rootNode = {};
@@ -274,6 +340,19 @@
             data: {graph: json2xml(rootNode)}
         });
     }
+
+    $('#actionName').on("change paste keyup", function() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        cy.nodes("node[id='" + nodeId + "']").data("name", $("#actionName").val());
+        $("#nodeName").text($("#actionName").val());
+    });
+
+    $('#animationName').on("change paste keyup", function() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        cy.nodes("node[id='" + nodeId + "']").data("animationname", $("#animationName").val());
+    });
+
+
 </script>
 
 

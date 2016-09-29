@@ -10,23 +10,13 @@ nodes = []
 edges = []
 
 
-def getNeighboursForGivenNode(nodeId):
-    doc = getDocForXmlFile(actionsFile)
-    neighboursForGivenNode = []
-
-    for action in doc["actions"]["action"]:
-        if (int(action["actionId"]) == nodeId):
-            neighboursForGivenNode = getNeighboursData(action)
-
-    return neighboursForGivenNode
-
-
 def getPersonalityNames():
     settingsDoc = getDocForXmlFile(settingsFile)
     for personality in settingsDoc["settings"]["personalities"]["personality"]:
         dict = {}
         dictData = {}
         dictData["name"] = personality["name"]
+        dictData["id"] = personality["id"]
         dict["data"] = dictData
         personalities.append(dict)
 
@@ -38,7 +28,7 @@ def parse():
     modifiers = []
     doc = getDocForXmlFile(actionsFile)
 
-    for action in doc["actions"]["action"]:
+    for action in toList(doc["actions"]["action"]):
         dict = {}
         dictData = {}
 
@@ -47,7 +37,7 @@ def parse():
         dictData["animationname"] = action["animationname"]
         dictData["modifiers"] = []
 
-        for modifier in action["modifiers"]["modifier"]:
+        for modifier in toList(action["modifiers"]["modifier"]):
             dictModifier = {}
             dictModifier["id"] = modifier["id"]
             dictModifier["value"] = modifier["value"]
@@ -70,7 +60,7 @@ def parse():
 def getNeighboursAsEdge(action):
     neighbourEdges = []
     if bool(action["neighbours"]):
-        for neighbour in action["neighbours"]["neighbour"]:
+        for neighbour in toList(action["neighbours"]["neighbour"]):
             edge = {}
             edgeData = {}
             edgeData["id"] = neighbour + "." + action["actionId"]
@@ -82,32 +72,6 @@ def getNeighboursAsEdge(action):
     return neighbourEdges
 
 
-def getNeighboursData(action):
-    if bool(action['neighbours']["neighbour"]):
-        neighbourData = {}
-        for neighbour in action['neighbours']["neighbour"]:
-            neighbourToBeInserted = {}
-            currentNeighbour = {}
-            currentNeighbour["id"] = neighbour["id"]
-            neighbourToBeInserted["data"] = currentNeighbour
-            neighbourData.append(neighbourToBeInserted)
-
-def removeNeighbourFromXml(neighourId, rootNode):
-    tree = ElementTree()
-    tree.parse('resources/actions.xml')
-    actions = tree.findall('action')
-    for action in actions:
-        if(int(action.find('actionId').text) == rootNode):
-            neighbours = action.find('neighbours')
-            for neighbour in neighbours:
-                if(int(neighbour.text) == neighourId):
-                    print('Removing ' + str(neighbour))
-                    neighbours.remove(neighbour)
-
-    #disabled for debugging
-    tree.write('resources/actions.xml')
-
-
 def saveGraph(graph):
     tree = ET.ElementTree(ET.fromstring(graph))
     tree.write('resources/actions.xml')
@@ -116,3 +80,6 @@ def saveGraph(graph):
 def getDocForXmlFile(fileName):
     with open(fileName) as fd:
         return xmltodict.parse(fd.read())
+
+def toList(object):
+    return object if type(object) is list else [object]
