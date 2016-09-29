@@ -1,10 +1,10 @@
 import json
 import webbrowser
-
+import dicttoxml
 import tkinter as tk
 from tkinter import filedialog
 from bottle import route, run, template, static_file, request
-from xmlParse import parse, getPersonalityNames, removeNeighbourFromXml, addEdgeToXml, removeNodeFromXml
+from xmlParse import saveGraph, parse, getPersonalityNames
 
 # Commented for debug purposes - DO NOT DELTE!
 # root = tk.Tk()
@@ -24,10 +24,8 @@ def index():
 
 @route('/', method='POST')
 def index():
-    neighbourNodeId = request.params.get('neighbourId', 0, type=int)
-    rootNodeId = request.params.get('rootId', 0, type=int)
-    removeNeighbourFromXml(neighbourNodeId, rootNodeId)
-
+    graph = request.params.get('graph', 0)
+    saveGraph(graph)
 
 @route('/', method='PUT')
 def index():

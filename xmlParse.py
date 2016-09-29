@@ -1,5 +1,5 @@
 import xmltodict
-from xml.etree.ElementTree import ElementTree, Element
+import xml.etree.ElementTree as ET
 
 actionsFile = 'resources/actions.xml'
 settingsFile = 'resources/settings.xml'
@@ -35,14 +35,31 @@ def getPersonalityNames():
 
 def parse():
     global edges
+    modifiers = []
     doc = getDocForXmlFile(actionsFile)
 
     for action in doc["actions"]["action"]:
         dict = {}
         dictData = {}
+
         dictData["id"] = action["actionId"]
         dictData["name"] = action["actionname"]
         dictData["animationname"] = action["animationname"]
+        dictData["modifiers"] = []
+
+        for modifier in action["modifiers"]["modifier"]:
+            dictModifier = {}
+            dictModifier["id"] = modifier["id"]
+            dictModifier["value"] = modifier["value"]
+            dictData["modifiers"].append(dictModifier)
+
+        dictPosition = {}
+        dictPosition["x"] = action["position"]["x"]
+        dictPosition["y"] = action["position"]["y"]
+        dictPosition["z"] = action["position"]["z"]
+
+        dictData["position"] = dictPosition
+
         dict["data"] = dictData
         nodes.append(dict)
         edges = edges + getNeighboursAsEdge(action)
@@ -90,34 +107,10 @@ def removeNeighbourFromXml(neighourId, rootNode):
     #disabled for debugging
     tree.write('resources/actions.xml')
 
-def addEdgeToXml(neighourId, rootNode):
-    tree = ElementTree()
-    tree.parse('resources/actions.xml')
 
-    actions = tree.findall('action')
-    for action in actions:
-        if(int(action.find('actionId').text) == rootNode):
-            neighbours = action.find('neighbours')
-            neighbour = Element('neighbour')
-            neighbour.text = str(neighourId)
-            neighbours.append(neighbour)
-
-            #disabled for debugging
-            tree.write('resources/actions.xml')
-
-def removeNodeFromXml(id):
-    tree = ElementTree()
-    tree.parse('resources/actions.xml')
-    actions = tree.getroot()
-    for action in actions:
-        removeNeighbourFromXml(int(id), int(action.find('actionId').text))
-        if(int(action.find('actionId').text) == id):
-            actions.remove(action)
+def saveGraph(graph):
+    tree = ET.ElementTree(ET.fromstring(graph))
     tree.write('resources/actions.xml')
-
-
-
-
 
 
 def getDocForXmlFile(fileName):

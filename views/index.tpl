@@ -16,6 +16,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+    <script src="http://goessner.net/download/prj/jsonxml/json2xml.js"></script>
     <script>
         $(document).ready(function () {
             $('#nodeEditor').submit(function (e) {
@@ -106,7 +107,7 @@
     </div>
 
     <div class="editNode">
-        <button type="submit" class="btn btn-success">save</button>
+        <button onclick="graphToXML()" class="btn btn-success">save</button>
         <button onclick="deleteNode()" class="btn btn-danger">delete</button>
     </div>
     <div class="newNode">
@@ -189,28 +190,14 @@
     function removeNeighbour(neighbourId, rootId) {
         for (var i = 0; i < edges.length; i++) {
             if (edges[i].data.source == rootId && edges[i].data.target == neighbourId) {
-                console.log(edges[i].data.id);
-
                 var escapedEdgeId = edges[i].data.id;
 
                 var edgeToRemove = cy.edges("edge[id='" + escapedEdgeId + "']");
-                console.log('Edge to remove: ' + edgeToRemove);
                 edgeToRemove.remove();
 
                 break;
             }
         }
-        sendNodeToDeleteToPython(neighbourId, rootId);
-
-        //location.reload();
-    }
-
-    function sendNodeToDeleteToPython(neighbourToDelete, rootOfNeighbour) {
-        $.ajax({
-            type: 'POST',
-            url: '/',
-            data: {neighbourId: neighbourToDelete, rootId: rootOfNeighbour}
-        });
     }
 
     function addNeighbour() {
@@ -220,43 +207,72 @@
         cy.add([
             {group: "edges", data: {source: nodeId, target: neighbourId}}
         ]);
-
-        sendNodeToAddToPython(neighbourId, nodeId);
-    }
-
-    function sendNodeToAddToPython(neighbourToAdd, rootIdOfEdge) {
-        $.ajax({
-            type: 'PUT',
-            url: '/',
-            data: {neighbourId: neighbourToAdd, rootId: rootIdOfEdge}
-        });
     }
 
     function deleteNode() {
         var nodeId = document.getElementById("nodeId").innerText;
         var nodeToRemove = cy.nodes("node[id='" + nodeId + "']");
         nodeToRemove.remove();
-
-        $.ajax({
-            type: 'DELETE',
-            url: '/',
-            data: {node: nodeId}
-        });
     }
 
     function newNode() {
         var id = highestId() + 1;
         cy.add([
-            {group: "nodes", data: {id: id, name: "newNode" + id, position: {x: 1000, y: 1000}}}
+            {group: "nodes", data: {id: id, name: "newNode" + id}, position:{x: cy.width()/2, y: cy.height()/2}}
         ]);
     }
 
     function highestId() {
+
         var currentHeighest = 0;
-        for(var i = 0; i < nodes.length; i++) {
-            currentHeighest = nodes[i].data.id > currentHeighest ? nodes[i].data.id : currentHeighest;
+        for(var i = 0; i < cy.nodes().length; i++) {
+            currentHeighest = cy.nodes()[i].data('id') > currentHeighest ? cy.nodes()[i].data('id') : currentHeighest;
         }
         return parseInt(currentHeighest);
+    }
+
+
+    function graphToXML() {
+        var rootNode = {};
+        var actionNode = {};
+
+        rootNode["actions"] = [];
+        actionNode["action"] = [];
+
+        for(var i = 0; i < cy.nodes().length; i++) {
+            var action = {};
+            var neighbours = {};
+            var modifiers = {};
+
+            action["neighbours"] = [];
+            action["modifiers"] = [];
+            neighbours["neighbour"] = [];
+            modifiers["modifier"] = [];
+
+
+            for (var j = 0; j < cy.edges().length; j++) {
+                if(cy.edges()[j].data('source') == cy.nodes()[i].data('id')){
+                    neighbours["neighbour"].push(cy.edges()[j].data('target'));
+                }
+            }
+
+            modifiers["modifier"].push(cy.nodes()[i].data("modifiers"));
+
+            action["neighbours"].push(neighbours);
+            action["modifiers"].push(modifiers);
+            action["position"] = cy.nodes()[i].data("position")
+            action["actionId"] = cy.nodes()[i].data('id');
+            action["actionname"] = cy.nodes()[i].data('name');
+            action["animationname"] = cy.nodes()[i].data('animationname');
+            actionNode["action"].push(action);
+        }
+        rootNode["actions"].push(actionNode)
+
+        $.ajax({
+            type: 'POST',
+            url: '/',
+            data: {graph: json2xml(rootNode)}
+        });
     }
 </script>
 
