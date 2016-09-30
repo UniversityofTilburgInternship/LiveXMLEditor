@@ -17,21 +17,6 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
     <script src="http://goessner.net/download/prj/jsonxml/json2xml.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#nodeEditor').submit(function (e) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/ajax',
-                    data: $(this).serialize(),
-                    success: function (response) {
-                        $('#ajaxP').html(response);
-                    }
-                });
-                e.preventDefault();
-            });
-        });
-    </script>
 
     <style>
         body {
@@ -82,6 +67,12 @@
     <div class="form-group">
         <label for="animationName">animation name:</label>
         <input type="text" class="form-control" id="animationName">
+    </div>
+    <h5>Position</h5>
+    <div class="form-group">
+        <div class="col-md-4">x<input id="x" class="form-control"  placeholder="x"> </div>
+        <div class="col-md-4">y<input id="y" class="form-control"  placeholder="y"> </div>
+        <div class="col-md-4">z<input id="z" class="form-control"  placeholder="z"> </div>
     </div>
     <div class="form-group">
         <label for="neighbours">neigbours:</label>
@@ -182,6 +173,7 @@
         $("#animationName").val(node.data('animationname'));
         refreshModifiers();
         refreshNeighbours();
+        refreshPositions();
 
     });
 
@@ -239,6 +231,17 @@
         ]);
     }
 
+    function refreshPositions() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        var node = cy.nodes("node[id='" + nodeId + "']");
+        $("#x").val(0);
+        $("#y").val(0);
+        $("#z").val(0);
+        $("#x").val(node.data("position").x);
+        $("#y").val(node.data("position").y);
+        $("#z").val(node.data("position").z);
+    }
+
 
     function refreshNeighbours() {
         var nodeId = document.getElementById("nodeId").innerText;
@@ -262,6 +265,7 @@
 
         $('.modifiers').empty();
 
+        console.log(modifiers);
         for(var i = 0; i < modifiers.length; i++) {
             $('.modifiers').append('<div class="col-md-8">' + personalities[modifiers[i].id].data.name + ' ' + modifiers[i].value  +
                     '</div> <div class="col-md-4">' +
@@ -366,6 +370,17 @@
     $('#animationName').on("change paste keyup", function() {
         var nodeId = document.getElementById("nodeId").innerText;
         cy.nodes("node[id='" + nodeId + "']").data("animationname", $("#animationName").val());
+    });
+
+    $('#x,#y,#z').on("change paste keyup", function() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        var position = cy.nodes("node[id='" + nodeId + "']").data("position");
+
+        position.x = $('#x').val();
+        position.y = $('#y').val();
+        position.z = $('#z').val();
+
+        cy.nodes("node[id='" + nodeId + "']").data("position", position);
     });
 
 
