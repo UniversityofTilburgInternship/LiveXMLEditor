@@ -37,11 +37,12 @@ def parse():
         dictData["animationname"] = action["animationname"]
         dictData["modifiers"] = []
 
-        for modifier in toList(action["modifiers"]["modifier"]):
-            dictModifier = {}
-            dictModifier["id"] = modifier["id"]
-            dictModifier["value"] = modifier["value"]
-            dictData["modifiers"].append(dictModifier)
+        if action["modifiers"] != None:
+            for modifier in toList(action["modifiers"]["modifier"]):
+                dictModifier = {}
+                dictModifier["id"] = modifier["id"]
+                dictModifier["value"] = modifier["value"]
+                dictData["modifiers"].append(dictModifier)
 
         dictPosition = {}
         dictPosition["x"] = action["position"]["x"]
@@ -66,6 +67,9 @@ def getNeighboursAsEdge(action):
             edgeData["id"] = neighbour + "." + action["actionId"]
             edgeData["source"] = action["actionId"]
             edgeData["target"] = neighbour
+            for node in nodes:
+                if node["data"]["id"] == neighbour:
+                    edgeData["name"] = node["data"]["name"]
             edge["data"] = edgeData
             neighbourEdges.append(edge)
 

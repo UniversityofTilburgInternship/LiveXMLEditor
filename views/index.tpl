@@ -72,9 +72,8 @@
 
 
 <div class="col-md-2">
-    <h1>Graph editor</h1>
-    <h2 id="nodeName"></h2>
-    <h3 id="nodeId"></h3>
+    <h3 id="nodeName"></h3>
+    <h4 style="display: none" id="nodeId"></h4>
 
     <div class="form-group">
         <label for="actionName">action name:</label>
@@ -119,13 +118,13 @@
         <button onclick="graphToXML()" class="btn btn-success">save</button>
         <button onclick="deleteNode()" class="btn btn-danger">delete</button>
     </div>
-    <div class="newNode">
-        <button onclick="newNode()"  class="btn btn-primary">New node +</button>
-    </div>
 </div>
 
 <h1>Graph</h1>
 <div id="cy">
+    <div style="padding: 5px; position: absolute; z-index: 2000;" class="newNode">
+        <button onclick="newNode()"  class="btn btn-primary">New node +</button>
+    </div>
 </div>
 
 
@@ -136,7 +135,6 @@
     var edges = {{!edges}};
     var personalities = {{!personalities}};
 
-    console.log(personalities);
     var cy = cytoscape({
                 container: $('#cy')[0],
 
@@ -183,32 +181,21 @@
         $("#actionName").val(node.data('name'));
         $("#animationName").val(node.data('animationname'));
         refreshModifiers();
-        var neighboursSelectElement = document.getElementById('neighbours');
+        refreshNeighbours();
 
-        $('.neighbours').empty();
-
-        for (var i = 0; i < node.connectedEdges().length; i++) {
-            var currentNodeName = node.connectedEdges()[i].target().data('name');
-
-            if (currentNodeName != node.data('name'))
-                $('.neighbours').append('<div class="col-md-8">' + currentNodeName + '' +
-                        '</div> <div class="col-md-4">' +
-                        '<button onclick="removeNeighbour(' + node.connectedEdges()[i].target().data("id") + ', ' + node.id() +
-                        ')">-</button></div> ');
-        }
     });
 
     function removeNeighbour(neighbourId, rootId) {
         for (var i = 0; i < edges.length; i++) {
             if (edges[i].data.source == rootId && edges[i].data.target == neighbourId) {
                 var escapedEdgeId = edges[i].data.id;
-
                 var edgeToRemove = cy.edges("edge[id='" + escapedEdgeId + "']");
                 edgeToRemove.remove();
-
                 break;
             }
         }
+
+        refreshNeighbours()
     }
 
     function addNeighbour() {
@@ -218,6 +205,8 @@
         cy.add([
             {group: "edges", data: {source: nodeId, target: neighbourId}}
         ]);
+
+        refreshNeighbours();
     }
 
     function deleteNode() {
@@ -236,7 +225,7 @@
                     name: "newNode" + id,
                     animationname: "animation",
                     modifiers: [
-                        {id: "none", value: "none"}
+
                     ]
                     ,
                     position: {
@@ -250,6 +239,23 @@
         ]);
     }
 
+
+    function refreshNeighbours() {
+        var nodeId = document.getElementById("nodeId").innerText;
+        var node = cy.nodes("node[id='" + nodeId + "']");
+        $('.neighbours').empty();
+
+        for (var i = 0; i < node.connectedEdges().length; i++) {
+            var currentNodeName = node.connectedEdges()[i].target().data('name');
+
+            if (currentNodeName != node.data('name'))
+                $('.neighbours').append('<div class="col-md-8">' + currentNodeName + '' +
+                        '</div> <div class="col-md-4">' +
+                        '<button onclick="removeNeighbour(' + node.connectedEdges()[i].target().data("id") + ', ' + node.id() +
+                        ')">-</button></div> ');
+        }
+    }
+
     function refreshModifiers() {
         var nodeId = document.getElementById("nodeId").innerText;
         var modifiers = cy.nodes("node[id='" + nodeId + "']").data("modifiers");
@@ -257,12 +263,24 @@
         $('.modifiers').empty();
 
         for(var i = 0; i < modifiers.length; i++) {
-            console.log(personalities[modifiers[i].id].data.name);
             $('.modifiers').append('<div class="col-md-8">' + personalities[modifiers[i].id].data.name + ' ' + modifiers[i].value  +
                     '</div> <div class="col-md-4">' +
                     '<button onclick="removeModifier(' + modifiers[i].id  +
                     ')">-</button></div> ');
         }
+    }
+
+    function removeModifier(id) {
+        var nodeId = document.getElementById("nodeId").innerText;
+        var modifiers = cy.nodes("node[id='" + nodeId + "']").data("modifiers");
+
+        for(var i = 0; i < modifiers.length; i++){
+            if(modifiers[i].id == id){
+                modifiers.splice(i, 1);
+            }
+        }
+        cy.nodes("node[id='" + nodeId + "']").data("modifiers", modifiers);
+        refreshModifiers();
     }
 
     function highestId() {
@@ -287,13 +305,11 @@
             }
         }
 
-        console.log($("#modifiers").val());
         if(!alreadyExists) {
             newModifier["id"] = $("#modifiers").val();
             newModifier["value"] = $("#modifier").val();
             modifiers.push(newModifier)
         }
-        console.log(modifiers);
         cy.nodes("node[id='" + nodeId + "']").data("modifiers", modifiers);
         refreshModifiers();
     }
