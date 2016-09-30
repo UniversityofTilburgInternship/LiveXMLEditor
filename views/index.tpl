@@ -269,7 +269,7 @@
 
         var currentHeighest = 0;
         for(var i = 0; i < cy.nodes().length; i++) {
-            currentHeighest = cy.nodes()[i].data('id') > currentHeighest ? cy.nodes()[i].data('id') : currentHeighest;
+            currentHeighest = parseInt(cy.nodes()[i].data('id')) > currentHeighest ? parseInt(cy.nodes()[i].data('id')) : currentHeighest;
         }
         return parseInt(currentHeighest);
     }
