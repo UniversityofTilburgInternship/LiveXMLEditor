@@ -48,7 +48,7 @@
             color: white;
             margin-top: -20px !important;
             padding-top: 0px !important;
-            height: 220%;
+            height: 420%;
         }
     </style>
 </head>
