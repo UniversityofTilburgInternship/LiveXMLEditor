@@ -1,11 +1,9 @@
-<settings>
-    <personalities>
-        <personality>
+<settings><personalities><personality>
             <id>0</id>
             <name>
                 Extraversion
             </name>
-            <minvalue>0</minvalue>
+            <minvalue>100</minvalue>
             <maxvalue>100</maxvalue>
         </personality>
         <personality>
@@ -13,7 +11,7 @@
             <name>
                 Egoism
             </name>
-            <minvalue>1</minvalue>
+            <minvalue>100</minvalue>
             <maxvalue>100</maxvalue>
         </personality>
         <personality>
@@ -21,7 +19,7 @@
             <name>
                 Thoroughness
             </name>
-            <minvalue>0</minvalue>
+            <minvalue>100</minvalue>
             <maxvalue>100</maxvalue>
         </personality>
         <personality>
@@ -29,49 +27,62 @@
             <name>
                 EmotionalStability
             </name>
-            <minvalue>0</minvalue>
+            <minvalue>100</minvalue>
             <maxvalue>100</maxvalue>
         </personality>
-        <personality>
-            <id>4</id>
-            <name>
-                Introverion
-            </name>
-        </personality>
-        <personality>
-            <id>5</id>
-            <name>
-                Altruism
-            </name>
-        </personality>
-        <personality>
-            <id>
-                6
-            </id>
-            <name>
-                Chaoticness
-            </name>
-        </personality>
-        <personality>
-            <id>
-                7
-            </id>
-            <name>Neuroticism</name>
-        </personality>
     </personalities>
+    <personalitynames>
+        <personality>
+            <name>Extraversion</name>
+            <id>0</id>
+        </personality>
+        <personality>
+            <name>Egoism</name>
+            <id>1</id>
+        </personality>
+        <personality>
+            <name>Thorougness</name>
+            <id>2</id>
+        </personality>
+        <personality>
+            <name>Emotional Stability</name>
+            <id>3</id>
+        </personality>
+        <personality>
+            <name>Intraversion</name>
+            <id>4</id>
+        </personality>
+        <personality>
+            <name>Altruism</name>
+            <id>5</id>
+        </personality>
+        <personality>
+            <name>Chaoticness</name>
+            <id>6</id>
+        </personality>
+        <personality>
+            <name>Neuroticism</name>
+            <id>7</id>
+        </personality>
+    </personalitynames>
     <spawnpoints>
         <spawnpoint>
-            <x>10.0</x>
-            <y>0.98</y>
-            <z>10.0</z>
+            <x>1.71</x>
+            <y>0.0</y>
+            <z>-1.57</z>
         </spawnpoint>
         <spawnpoint>
-            <x>5.0</x>
-            <y>0.98</y>
-            <z>15.0</z>
+            <x>2.22</x>
+            <y>0.0</y>
+            <z>6.43</z>
         </spawnpoint>
     </spawnpoints>
     <modelnames>
-        <modelname>SpartanKingPrefab</modelname>
+        <modelname>PlayerLiam</modelname>
+        <modelname>PlayerMalcon</modelname>
+        <modelname>PlayerRegina</modelname>
+        <modelname>PlayerRemy</modelname>
+        <modelname>PlayerShae</modelname>
+        <modelname>PlayerStefani</modelname>
     </modelnames>
 </settings>

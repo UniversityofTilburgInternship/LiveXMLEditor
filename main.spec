@@ -4,9 +4,9 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\steve\\IdeaProjects\\xmleditor'],
-             binaries=None,
-             datas=None,
+             pathex=['C:\\Users\\steve\\Documents\\Projects\\LiveXMLEditor'],
+             binaries=[],
+             datas=[],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],

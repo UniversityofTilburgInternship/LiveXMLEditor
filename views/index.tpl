@@ -262,7 +262,6 @@
     function refreshModifiers() {
         var nodeId = document.getElementById("nodeId").innerText;
         var modifiers = cy.nodes("node[id='" + nodeId + "']").data("modifiers");
-
         $('.modifiers').empty();
 
         console.log(modifiers);

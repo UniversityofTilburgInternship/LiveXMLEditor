@@ -9,11 +9,11 @@ from xmlParse import saveGraph, parse, getPersonalityNames
 # Commented for debug purposes - DO NOT DELTE!
 # root = tk.Tk()
 # root.withdraw()
-# file = filedialog.askopenfilename()
+# fileSettings = filedialog.askopenfilename()
 
 personalities = getPersonalityNames()
 nodes, edges = parse()
-
+print personalities
 
 @route('/')
 def index():
